@@ -42,10 +42,10 @@
 extern SDL_Surface *back_surface;
 
 enum {
-  MENU_SET_SOUND,
-  MENU_SET_CPU,
-  MENU_SET_SPEED_LIMIT,
+  MENU_SET_FPS,
   MENU_SET_SKIP_FPS,
+  MENU_SET_SPEED_LIMIT,
+  MENU_SET_SOUND,
   MENU_SET_RAM_SIZE,
   MENU_SET_RENDER,
   MENU_SET_GREEN,
@@ -54,21 +54,24 @@ enum {
   MENU_SET_EXPLORE,
   MENU_SET_RESET_LOAD,
 
+  MENU_KEYBOARD,
+  MENU_JOYSTICK,
+
   MENU_SET_LOAD,
   MENU_SET_SAVE,
   MENU_SET_RESET,
 
-  MENU_SET_BACK,
+  // MENU_SET_BACK,
 
   MAX_MENU_SET_ITEM
 };
 
   static menu_item_t menu_list[] =
   {
-    { "Sound enable       :"},
-    { "Display fps        :"},
+    { "Display FPS        :"},
+    { "Frameskip          :"},
     { "Speed limiter      :"},
-    { "Skip frame         :"},
+    { "Sound enable       :"},
     { "Ram size           :"},
     { "Render mode        :"},
     { "Green color        :"},
@@ -76,14 +79,16 @@ enum {
     { "Sound tick ratio   :"},
     { "Disk startup       :"},
     { "Reset on startup   :"},
+    { "Keyboard" },
+    { "Joystick" },
 
     { "Load settings"        },
     { "Save settings"        },
     { "Reset settings"       },
-    { "Back to Menu"         }
+    // { "Back to Menu"         }
   };
 
-  static int cur_menu_id = MENU_SET_LOAD;
+  static int cur_menu_id = 0;
 
   static int cpc_snd_enabled       = 1;
   static int cpc_speed_limiter     = 50;
@@ -104,17 +109,13 @@ psp_display_screen_settings_menu(void)
   char buffer[64];
   int menu_id = 0;
   int color   = 0;
-  int x       = 0;
-  int y       = 0;
-  int y_step  = 0;
+  int x       = 10;
+  int y       = 20;
+  int y_step  = 10;
 
   psp_sdl_blit_help();
 
-  x      = 10;
-  y      =  5;
-  y_step = 10;
-
-  for (menu_id = 0; menu_id < MAX_MENU_SET_ITEM; menu_id++) {
+  for (menu_id = 0; menu_id < MAX_MENU_SET_ITEM; menu_id++, y += y_step) {
     color = PSP_MENU_TEXT_COLOR;
     if (cur_menu_id == menu_id) color = PSP_MENU_SEL_COLOR;
 
@@ -132,7 +133,7 @@ psp_display_screen_settings_menu(void)
       string_fill_with_space(buffer, 4);
       psp_sdl_back2_print(140, y, buffer, color);
     } else
-    if (menu_id == MENU_SET_CPU) {
+    if (menu_id == MENU_SET_FPS) {
       if (cpc_view_fps) strcpy(buffer,"on ");
       else             strcpy(buffer,"off");
       string_fill_with_space(buffer, 4);
@@ -193,11 +194,9 @@ psp_display_screen_settings_menu(void)
       string_fill_with_space(buffer, 4);
       psp_sdl_back2_print(140, y, buffer, color);
     } else
-    if (menu_id == MENU_SET_RESET) {
+    if (menu_id == MENU_SET_RESET || menu_id == MENU_JOYSTICK) {
       y += y_step;
     }
-
-    y += y_step;
   }
 
   psp_menu_display_save_name();
@@ -426,19 +425,10 @@ psp_settings_menu(void)
       psp_settings_menu_reset();
       end_menu = 1;
     } else
-    if ((new_pad == GP2X_CTRL_LEFT ) ||
-        (new_pad == GP2X_CTRL_RIGHT) ||
-        (new_pad == GP2X_CTRL_CROSS) ||
-        (new_pad == GP2X_CTRL_CIRCLE))
+     if ((new_pad == GP2X_CTRL_LEFT ) || (new_pad == GP2X_CTRL_RIGHT))
     {
-      int step = 0;
-
-      if (new_pad & GP2X_CTRL_RIGHT) {
-        step = 1;
-      } else
-      if (new_pad & GP2X_CTRL_LEFT) {
-        step = -1;
-      }
+      int step = 1;
+      if (new_pad & GP2X_CTRL_LEFT) step = -1;
 
       switch (cur_menu_id )
       {
@@ -446,7 +436,7 @@ psp_settings_menu(void)
         break;
         case MENU_SET_SPEED_LIMIT : psp_settings_menu_limiter( step );
         break;
-        case MENU_SET_CPU       : cpc_view_fps     = ! cpc_view_fps;
+        case MENU_SET_FPS       : cpc_view_fps     = ! cpc_view_fps;
         break;
         case MENU_SET_GREEN       : cpc_green     = ! cpc_green;
         break;
@@ -464,6 +454,18 @@ psp_settings_menu(void)
         break;
         case MENU_SET_RAM_SIZE  : psp_settings_menu_ram_size( step );
         break;
+      }
+    } else 
+    if ((new_pad == GP2X_CTRL_CIRCLE))
+    {
+      switch (cur_menu_id )
+      {
+        case MENU_KEYBOARD   : psp_keyboard_menu();
+                     old_pad = new_pad = 0;
+        break;
+        case MENU_JOYSTICK   : psp_joystick_menu();
+                     old_pad = new_pad = 0;
+        break;
         case MENU_SET_LOAD       : psp_settings_menu_load(FMGR_FORMAT_SET);
                                    old_pad = new_pad = 0;
         break;
@@ -472,11 +474,7 @@ psp_settings_menu(void)
         break;
         case MENU_SET_RESET      : psp_settings_menu_reset();
         break;
-
-        case MENU_SET_BACK       : end_menu = 1;
-        break;
       }
-
     } else
     if(new_pad & GP2X_CTRL_UP) {
 
@@ -494,7 +492,7 @@ psp_settings_menu(void)
       /* Cancel */
       end_menu = -1;
     } else
-    if((new_pad & GP2X_CTRL_SELECT) == GP2X_CTRL_SELECT) {
+    if((new_pad & GP2X_CTRL_CROSS) || (new_pad & GP2X_CTRL_SELECT)) {
       /* Back to CPC */
       end_menu = 1;
     }
@@ -506,10 +504,9 @@ psp_settings_menu(void)
 
   psp_kbd_wait_no_button();
 
-  psp_sdl_clear_screen( PSP_MENU_BLACK_COLOR );
-  psp_sdl_flip();
-  psp_sdl_clear_screen( PSP_MENU_BLACK_COLOR );
-  psp_sdl_flip();
+  psp_sdl_clear_screen( PSP_MENU_BLACK_COLOR ); psp_sdl_flip();
+  psp_sdl_clear_screen( PSP_MENU_BLACK_COLOR ); psp_sdl_flip();
+  psp_sdl_clear_screen( PSP_MENU_BLACK_COLOR ); psp_sdl_flip();
 
   return 1;
 }

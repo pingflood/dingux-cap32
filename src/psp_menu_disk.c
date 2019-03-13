@@ -221,7 +221,7 @@ psp_disk_menu()
       /* Exit ! */
       psp_sdl_exit(0);
     } else
-    if(new_pad & GP2X_CTRL_SELECT) {
+    if((new_pad & GP2X_CTRL_CROSS) || (new_pad & GP2X_CTRL_SELECT)) {
       /* Back to Main menu */
       end_menu = 1;
     } else
@@ -247,14 +247,10 @@ psp_disk_menu()
       /* Cancel */
       end_menu = -1;
     } else 
-    if(new_pad & GP2X_CTRL_CROSS) {
+    if(new_pad & GP2X_CTRL_CIRCLE) {
       /* RUN" */
       psp_disk_run_command();
       end_menu = 2;
-    } else 
-    if((new_pad & GP2X_CTRL_SELECT) == GP2X_CTRL_SELECT) {
-      /* Back to CPC */
-      end_menu = 1;
     }
   }
  

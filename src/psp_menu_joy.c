@@ -50,7 +50,7 @@ enum {
   MENU_JOY_LOAD,
   MENU_JOY_SAVE,
   MENU_JOY_RESET,
-  MENU_JOY_BACK,
+  // MENU_JOY_BACK,
 
   MAX_MENU_JOY_ITEM
 };
@@ -66,7 +66,7 @@ enum {
     { "Save joystick"       },
     { "Reset joystick"      },
 
-    { "Back to Menu"        }
+    // { "Back to Menu"        }
   };
 
   static int cur_menu_id = MENU_JOY_LOAD;
@@ -96,15 +96,11 @@ psp_display_screen_joystick_menu(void)
   char buffer[64];
   int menu_id = 0;
   int color   = 0;
-  int x       = 0;
-  int y       = 0;
-  int y_step  = 0;
+  int x       = 10;
+  int y       = 20;
+  int y_step  = 10;
 
   psp_sdl_blit_help();
-  
-  x      = 10;
-  y      =  5;
-  y_step = 10;
   
   for (menu_id = 0; menu_id < MAX_MENU_JOY_ITEM; menu_id++) {
     color = PSP_MENU_TEXT_COLOR;
@@ -300,19 +296,10 @@ psp_joystick_menu(void)
       psp_settings_menu_reset();
       end_menu = 1;
     } else
-    if ((new_pad == GP2X_CTRL_LEFT ) || 
-        (new_pad == GP2X_CTRL_RIGHT) ||
-        (new_pad == GP2X_CTRL_CROSS) || 
-        (new_pad == GP2X_CTRL_CIRCLE))
+    if ((new_pad == GP2X_CTRL_LEFT ) || (new_pad == GP2X_CTRL_RIGHT))
     {
-      int step = 0;
-
-      if (new_pad & GP2X_CTRL_RIGHT) {
-        step = 1;
-      } else
-      if (new_pad & GP2X_CTRL_LEFT) {
-        step = -1;
-      }
+      int step = 1;
+      if (new_pad & GP2X_CTRL_LEFT) step = -1;
 
       switch (cur_menu_id ) 
       {
@@ -324,6 +311,12 @@ psp_joystick_menu(void)
         break;              
         case MENU_JOY_AUTOFIRE_M  : cpc_auto_fire_mode = ! cpc_auto_fire_mode;
         break;              
+      }
+    } else
+    if ((new_pad == GP2X_CTRL_CIRCLE))
+    {
+      switch (cur_menu_id ) 
+      {
         case MENU_JOY_LOAD       : psp_joystick_menu_load(FMGR_FORMAT_JOY);
                                    old_pad = new_pad = 0;
         break;              
@@ -333,8 +326,8 @@ psp_joystick_menu(void)
         case MENU_JOY_RESET      : psp_joystick_menu_reset();
         break;                     
                                    
-        case MENU_JOY_BACK       : end_menu = 1;
-        break;                     
+        // case MENU_JOY_BACK       : end_menu = 1;
+        // break;                     
       }
 
     } else
@@ -354,7 +347,7 @@ psp_joystick_menu(void)
       /* Cancel */
       end_menu = -1;
     } else 
-    if(new_pad & GP2X_CTRL_SELECT) {
+    if((new_pad & GP2X_CTRL_CROSS) || (new_pad & GP2X_CTRL_SELECT)) {
       /* Back to CPC */
       end_menu = 1;
     }
@@ -366,10 +359,9 @@ psp_joystick_menu(void)
 
   psp_kbd_wait_no_button();
 
-  psp_sdl_clear_screen( PSP_MENU_BLACK_COLOR );
-  psp_sdl_flip();
-  psp_sdl_clear_screen( PSP_MENU_BLACK_COLOR );
-  psp_sdl_flip();
+  psp_sdl_clear_screen( PSP_MENU_BLACK_COLOR ); psp_sdl_flip();
+  psp_sdl_clear_screen( PSP_MENU_BLACK_COLOR ); psp_sdl_flip();
+  psp_sdl_clear_screen( PSP_MENU_BLACK_COLOR ); psp_sdl_flip();
 
   return 1;
 }

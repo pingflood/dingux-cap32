@@ -377,11 +377,12 @@ psp_sdl_blit_splash()
 void
 psp_sdl_blit_help()
 {
-  if (! help_surface) {
-    help_surface = IMG_Load("./help.png");
-  }
-  back2_surface = help_surface;
-	SDL_BlitSurface(back2_surface, NULL, back_surface, NULL);
+  psp_sdl_blit_background();
+ //  if (! help_surface) {
+ //    help_surface = IMG_Load("./help.png");
+ //  }
+ //  back2_surface = help_surface;
+	// SDL_BlitSurface(back2_surface, NULL, back_surface, NULL);
 }
 
 void
@@ -398,18 +399,17 @@ psp_sdl_display_splash()
   psp_sdl_print(x, y, CAP32_VERSION, col);
   psp_sdl_flip();
 
-  psp_sdl_blit_splash();
-  psp_sdl_print(x, y, CAP32_VERSION, col);
-  psp_sdl_flip();
+  // psp_sdl_blit_splash();
+  // psp_sdl_print(x, y, CAP32_VERSION, col);
+  // psp_sdl_flip();
 
-  SDL_Delay(1000);
+  // SDL_Delay(1000);
 
-
-  while (index < 50) {
-    gp2xCtrlPeekBufferPositive(&c, 1);
-    if (c.Buttons & (GP2X_CTRL_START|GP2X_CTRL_CROSS)) break;
-    index++;
-  }
+  // while (index < 50) {
+  //   gp2xCtrlPeekBufferPositive(&c, 1);
+  //   if (c.Buttons & (GP2X_CTRL_START|GP2X_CTRL_CROSS)) break;
+  //   index++;
+  // }
 }
 
 void
