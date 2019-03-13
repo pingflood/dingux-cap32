@@ -43,15 +43,6 @@ SDL_Surface *splash_surface;
 SDL_Surface *thumb_surface;
 SDL_Surface *save_surface;
 
-#define SDL_DEFAULT_VIDEO_FLAGS SDL_HWSURFACE
-#if defined(DOUBLEBUF)
-#define SDL_VIDEO_FLAGS SDL_DEFAULT_VIDEO_FLAGS | SDL_DOUBLEBUF
-#else
-#if defined(TRIPLEBUF)
-#define SDL_VIDEO_FLAGS SDL_DEFAULT_VIDEO_FLAGS | SDL_TRIPLEBUF
-#endif
-#endif
-
 uint
 psp_sdl_rgb(uchar R, uchar G, uchar B)
 {
@@ -677,7 +668,12 @@ psp_sdl_init(void)
     PSP_SDL_SCREEN_WIDTH,
     PSP_SDL_SCREEN_HEIGHT,
     16 ,
-    SDL_HWSURFACE | SDL_TRIPLEBUF
+    SDL_HWSURFACE | 
+#ifdef SDL_TRIPLEBUF
+  SDL_TRIPLEBUF
+#else
+  SDL_DOUBLEBUF
+#endif
   );
 
   if ( !back_surface) {
