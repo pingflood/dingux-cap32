@@ -41,25 +41,27 @@
 
 extern SDL_Surface *back_surface;
 
-# define MENU_SET_SOUND         0
-# define MENU_SET_CPU           1
-# define MENU_SET_SPEED_LIMIT   2
-# define MENU_SET_SKIP_FPS      3
-# define MENU_SET_RAM_SIZE      4
-# define MENU_SET_RENDER        5
-# define MENU_SET_GREEN         6
-# define MENU_SET_BORDER        7
-# define MENU_SET_SPEED         8
-# define MENU_SET_EXPLORE       9
-# define MENU_SET_RESET_LOAD   10
+enum {
+  MENU_SET_SOUND,
+  MENU_SET_CPU,
+  MENU_SET_SPEED_LIMIT,
+  MENU_SET_SKIP_FPS,
+  MENU_SET_RAM_SIZE,
+  MENU_SET_RENDER,
+  MENU_SET_GREEN,
+  MENU_SET_BORDER,
+  MENU_SET_SPEED,
+  MENU_SET_EXPLORE,
+  MENU_SET_RESET_LOAD,
 
-# define MENU_SET_LOAD         11
-# define MENU_SET_SAVE         12
-# define MENU_SET_RESET        13
+  MENU_SET_LOAD,
+  MENU_SET_SAVE,
+  MENU_SET_RESET,
 
-# define MENU_SET_BACK         14
+  MENU_SET_BACK,
 
-# define MAX_MENU_SET_ITEM (MENU_SET_BACK + 1)
+  MAX_MENU_SET_ITEM
+};
 
   static menu_item_t menu_list[] =
   {

@@ -41,17 +41,19 @@
 
 extern SDL_Surface *back_surface;
 
-# define MENU_JOY_JOYSTICK      0
-# define MENU_JOY_ANALOG        1
-# define MENU_JOY_AUTOFIRE_T    2
-# define MENU_JOY_AUTOFIRE_M    3
+enum {
+  MENU_JOY_JOYSTICK,
+  MENU_JOY_ANALOG,
+  MENU_JOY_AUTOFIRE_T,
+  MENU_JOY_AUTOFIRE_M,
 
-# define MENU_JOY_LOAD          4
-# define MENU_JOY_SAVE          5
-# define MENU_JOY_RESET         6
-# define MENU_JOY_BACK          7
+  MENU_JOY_LOAD,
+  MENU_JOY_SAVE,
+  MENU_JOY_RESET,
+  MENU_JOY_BACK,
 
-# define MAX_MENU_JOY_ITEM (MENU_JOY_BACK + 1)
+  MAX_MENU_JOY_ITEM
+};
 
   static menu_item_t menu_list[] =
   {

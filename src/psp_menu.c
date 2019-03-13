@@ -48,31 +48,33 @@
 
 extern SDL_Surface *back_surface;
 
-# define MENU_SCREENSHOT   0
+enum {
+  MENU_SCREENSHOT,
 
-# define MENU_LOAD_SLOT    1
-# define MENU_SAVE_SLOT    2
-# define MENU_DEL_SLOT     3
+  MENU_LOAD_SLOT,
+  MENU_SAVE_SLOT,
+  MENU_DEL_SLOT,
 
-# define MENU_HELP         4
-# define MENU_COMMAND      5
+  MENU_HELP,
+  MENU_COMMAND,
 
-# define MENU_LOAD_SNA     6
-# define MENU_LOAD_DSKA    7
-# define MENU_EXPL_DSKA    8
-# define MENU_LOAD_DSKB    9
+  MENU_LOAD_SNA,
+  MENU_LOAD_DSKA,
+  MENU_EXPL_DSKA,
+  MENU_LOAD_DSKB,
 
-# define MENU_EDITOR      10
-# define MENU_CHEATS      11
-# define MENU_KEYBOARD    12
-# define MENU_JOYSTICK    13
-# define MENU_SETTINGS    14
+  MENU_EDITOR,
+  MENU_CHEATS,
+  MENU_KEYBOARD,
+  MENU_JOYSTICK,
+  MENU_SETTINGS,
 
-# define MENU_RESET       15
-# define MENU_BACK        16
-# define MENU_EXIT        17
+  MENU_RESET,
+  MENU_BACK,
+  MENU_EXIT,
 
-# define MAX_MENU_ITEM (MENU_EXIT + 1)
+  MAX_MENU_ITEM
+};
 
   static menu_item_t menu_list[] =
   {
@@ -102,7 +104,7 @@ extern SDL_Surface *back_surface;
     { "Exit" }
   };
 
-  static int cur_menu_id = MENU_LOAD_SNA;
+  static int cur_menu_id = 0;
   static int cur_slot    = 0;
 
   static int cur_command = 0;
