@@ -1,4 +1,5 @@
 *.o
+*.a
 *.dge
 *.zip
 *.ipk

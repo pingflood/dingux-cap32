@@ -8,6 +8,8 @@ CROSS_COMPILE := $(CHAINPREFIX)/usr/bin/mipsel-linux-
 CC = $(CROSS_COMPILE)gcc
 CXX = $(CROSS_COMPILE)g++
 STRIP = $(CROSS_COMPILE)strip
+AR = $(CROSS_COMPILE)ar
+RANLIB = $(CROSS_COMPILE)ranlib
 
 SYSROOT := $(shell $(CC) --print-sysroot)
 SDL_CONFIG = $(SYSROOT)/usr/bin/sdl-config
@@ -42,8 +44,8 @@ OBJS = 	./src/gp2x_psp.o \
 		./src/psp_editor.o \
 		./src/miniunz.o \
 		./src/unzip.o \
-		./src/psp_fmgr.o
-#libcpccat/fs.o # new
+		./src/psp_fmgr.o \
+		./src/libcpccat/fs.o # new
 
 DEFAULT_CFLAGS = $(shell $(SDL_CONFIG) --cflags)
 
@@ -72,6 +74,10 @@ LIBS += ./src/libcpccat/libcpccat.a
 LIBS += -lpng -lz -lm -lpthread  -ldl
 
 #libcpccat/libcpccat.a  \ # old
+
+./src/libcpccat/libcpccat.a: ./src/libcpccat/fs.o
+	$(AR) cru $@ $?
+	$(RANLIB) $@
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
