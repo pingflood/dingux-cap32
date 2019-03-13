@@ -75,9 +75,6 @@ LIBS += -lpng -lz -lm -lpthread  -ldl
 
 #libcpccat/libcpccat.a  \ # old
 
-./src/libcpccat/libcpccat.a: ./src/libcpccat/fs.o
-	$(AR) cru $@ $?
-	$(RANLIB) $@
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -85,6 +82,9 @@ LIBS += -lpng -lz -lm -lpthread  -ldl
 all: $(OBJS)
 	$(CC) $(LDFLAGS) $(CFLAGS) $(OBJS) $(LIBS) -o $(TARGET) && $(STRIP) $(TARGET)
 
+./src/libcpccat/libcpccat.a: ./src/libcpccat/fs.o
+	$(AR) cru $@ $?
+	$(RANLIB) $@
 # install: $(TARGET)
 # 	cp $< /media/dingux/local/emulators/dingux-cap32/
 
