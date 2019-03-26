@@ -530,10 +530,15 @@ cpc_decode_key(int psp_b, int button_pressed)
   }
 
   if (psp_b == KBD_START) {
-    kbd_start_button_active = button_pressed;
+     if (button_pressed) psp_kbd_enter_danzeff();
+    // kbd_start_button_active = button_pressed;
   } else
   if (psp_b == KBD_SELECT) {
-    kbd_select_button_active = button_pressed;
+    if (button_pressed) {
+      psp_main_menu();
+      psp_init_keyboard();
+    }
+    // kbd_select_button_active = button_pressed;
   } else {
   if (psp_b == KBD_FIRE) {
     kbd_home_button_released = !button_pressed;
@@ -579,16 +584,17 @@ cpc_decode_key(int psp_b, int button_pressed)
   }
 }
 
-  if((kbd_select_button_active && kbd_start_button_active) || kbd_home_button_released){
-    kbd_select_button_active = false;
-    kbd_start_button_active  = false;
-    kbd_home_button_released = false;
-    psp_main_menu();
-    psp_init_keyboard();
-  }else if(kbd_start_button_active){
-    kbd_start_button_active  = false;
-    psp_kbd_enter_danzeff();
-  }
+  // if((kbd_select_button_active && kbd_start_button_active) || kbd_home_button_released){
+  // if((kbd_select_button_active) || kbd_home_button_released){
+  //   kbd_select_button_active = false;
+  //   kbd_start_button_active  = false;
+  //   kbd_home_button_released = false;
+  //   psp_main_menu();
+  //   psp_init_keyboard();
+  // }else if(kbd_start_button_active){
+  //   kbd_start_button_active  = false;
+  //   psp_kbd_enter_danzeff();
+  // }
 
   return 0;
 }
