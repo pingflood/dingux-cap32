@@ -19,8 +19,6 @@
 # ifndef _GP2X_FMGR_H_
 # define _GP2X_FMGR_H_
 
-# define GP2X_FMGR_MAX_PATH    512
-# define GP2X_FMGR_MAX_NAME    256
 # define GP2X_FMGR_MAX_ENTRY  2048
 
 # define FMGR_FORMAT_SNA   1

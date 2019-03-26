@@ -581,16 +581,19 @@ static char user_filedir_snap[GP2X_FMGR_MAX_NAME];
 static char user_filedir_disk[GP2X_FMGR_MAX_NAME];
 
 int
-psp_fmgr_menu(int format, char drive)
+// psp_fmgr_menu(int format, char drive)
+psp_fmgr_menu_load(int format, char drive, const char *_user_filename)
 {
   static int  first = 1;
 
   char *user_filedir;
-  char user_filename[GP2X_FMGR_MAX_NAME];
+  // char user_filename[GP2X_FMGR_MAX_NAME];
   struct stat       aStat;
   int               file_format;
   int               error;
   int               ret;
+
+  strcpy(user_filename, _user_filename);
 
   user_file_format = format;
   ret = 0;
@@ -618,7 +621,9 @@ psp_fmgr_menu(int format, char drive)
 
   psp_kbd_wait_no_button();
 
-  if (psp_file_request(user_filename, user_filedir)) {
+  if (!strlen(user_filename) > 0 && !psp_file_request(user_filename, user_filedir)) return 0;
+
+  if (1 || !strcmp(user_filename, "") || psp_file_request(user_filename, user_filedir)) {
     error = 0;
     if (stat(user_filename, &aStat)) error = 1;
     else
@@ -654,4 +659,10 @@ psp_fmgr_menu(int format, char drive)
   psp_kbd_wait_no_button();
 
   return ret;
+}
+
+int 
+psp_fmgr_menu(int format, char drive)
+{
+  return psp_fmgr_menu_load(format, drive, "");
 }
