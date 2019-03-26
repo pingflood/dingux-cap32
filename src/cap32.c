@@ -3379,7 +3379,7 @@ cap32_initialize()
   snprintf(CPC.cpc_txt_path, MAX_PATH, "%s/txt",  CPC.cpc_home_dir); mkdir(CPC.cpc_txt_path, 0777);
   snprintf(CPC.cpc_disk_path, MAX_PATH, "%s/disk",  CPC.cpc_home_dir); mkdir(CPC.cpc_disk_path, 0777);
   snprintf(CPC.cpc_snap_path, MAX_PATH, "%s/snap",  CPC.cpc_home_dir); mkdir(CPC.cpc_snap_path, 0777);
-  snprintf(CPC.cpc_bios_path, MAX_PATH, "%s/bios",  CPC.cpc_home_dir); mkdir(CPC.cpc_bios_path, 0777);
+  snprintf(CPC.cpc_bios_path, MAX_PATH, "./bios");
 
   CPC.model                 = 2; // CPC 6128
   CPC.jumpers               = CPC_jumpers;
