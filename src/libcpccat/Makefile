@@ -1,6 +1,6 @@
-CC=/opt/gcw0-toolchain/usr/bin/mipsel-linux-gcc
-AR=/opt/gcw0-toolchain/usr/bin/mipsel-linux-ar
-RANLIB=/opt/gcw0-toolchain/usr/bin/mipsel-linux-ranlib
+CC=/opt/mipsel-linux-uclibc/usr/bin/mipsel-linux-gcc
+AR=/opt/mipsel-linux-uclibc/usr/bin/mipsel-linux-ar
+RANLIB=/opt/mipsel-linux-uclibc/usr/bin/mipsel-linux-ranlib
 
 CFLAGS=-O2 -Wall -DDINGUX_MODE
 

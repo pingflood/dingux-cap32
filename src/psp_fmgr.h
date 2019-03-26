@@ -29,6 +29,7 @@
 # define FMGR_FORMAT_ZIP   6
 # define FMGR_FORMAT_SET   7
 
+  extern int psp_fmgr_menu_load(int format, char drive, const char *_user_filename);
   extern int psp_fmgr_menu(int format, char drive);
   extern int psp_fmgr_getExtId(const char *szFilePath);
   extern int psp_fmgr_get_dir_list(char *basedir, int dirmax, char **dirname);

@@ -2575,7 +2575,7 @@ audio_align_samples(int given)
 int
 audio_init(void)
 {
-   int n;
+   int n = 1;
    SDL_AudioSpec desired;
    SDL_AudioSpec obtained;
 
@@ -2593,6 +2593,9 @@ audio_init(void)
    desired.samples  = desired.freq / 50;
    desired.callback = audio_update;
    desired.userdata = NULL;
+
+   while (n < desired.samples) n *= 2; // Fragment size must be a power of two
+   desired.samples = n;
 
    if (SDL_OpenAudio(&desired, &obtained) < 0) {
       fprintf(stderr, "Could not open audio: %s\n", SDL_GetError());
