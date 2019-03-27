@@ -1,0 +1,6 @@
+title=Dingux Cap32
+description=Amstrad CPC Emulator
+exec=/home/retrofw/emus/dingux-cap32/dingux-cap32.dge
+selectordir=/home/retrofw/roms/amstrad
+selectorfilter=.dsk
+clock=600

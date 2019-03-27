@@ -79,18 +79,33 @@ LIBS += -lpng -lz -lm -lpthread  -ldl
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
 
-all: $(OBJS)
+all : $(TARGET)
+
+$(TARGET): $(OBJS)
 	$(CC) $(LDFLAGS) $(CFLAGS) $(OBJS) $(LIBS) -o $(TARGET) && $(STRIP) $(TARGET)
 
 ./src/libcpccat/libcpccat.a: ./src/libcpccat/fs.o
 	$(AR) cru $@ $?
 	$(RANLIB) $@
 
-# install: $(TARGET)
-# 	cp $< /media/dingux/local/emulators/dingux-cap32/
+ipk: $(TARGET)
+	@rm -rf /tmp/.dingux-cap32-ipk/bios && mkdir -p /tmp/.dingux-cap32-ipk/root/home/retrofw/emus/dingux-cap32 /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators.systems
+	@cp -r dingux-cap32/dingux-cap32.dge dingux-cap32/dingux-cap32.man.txt dingux-cap32/dingux-cap32.png dingux-cap32/splash.png dingux-cap32/thumb.png dingux-cap32/background.png dingux-cap32/graphics dingux-cap32/bios /tmp/.dingux-cap32-ipk/root/home/retrofw/emus/dingux-cap32
+	@cp dingux-cap32/dingux-cap32.lnk /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators
+	@cp dingux-cap32/amstrad.dingux-cap32.lnk /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators.systems
+	@sed "s/^Version:.*/Version: $$(date +%Y%m%d)/" dingux-cap32/control > /tmp/.dingux-cap32-ipk/control
+	@cp dingux-cap32/conffiles /tmp/.dingux-cap32-ipk/
+	@tar --owner=0 --group=0 -czvf /tmp/.dingux-cap32-ipk/control.tar.gz -C /tmp/.dingux-cap32-ipk/ control conffiles
+	@tar --owner=0 --group=0 -czvf /tmp/.dingux-cap32-ipk/data.tar.gz -C /tmp/.dingux-cap32-ipk/root/ .
+	@echo 2.0 > /tmp/.dingux-cap32-ipk/debian-binary
+	@ar r dingux-cap32/dingux-cap32.ipk /tmp/.dingux-cap32-ipk/control.tar.gz /tmp/.dingux-cap32-ipk/data.tar.gz /tmp/.dingux-cap32-ipk/debian-binary
 
 clean:
 	rm -f $(OBJS) $(TARGET)
 
 ctags:
 	ctags *[ch]
+
+# install: $(TARGET)
+# 	cp $< /media/dingux/local/emulators/dingux-cap32/
+
