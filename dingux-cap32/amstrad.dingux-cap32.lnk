@@ -1,4 +1,4 @@
-title=Amstrad CPC Emulator
+title=Amstrad CPC
 description=Dingux Cap32 Emulator
 exec=/home/retrofw/emus/dingux-cap32/dingux-cap32.dge
 selectordir=/home/retrofw/roms/amstrad
