@@ -1,5 +1,7 @@
 #
-# Port for the RetroGame by pingflood; 2018-2019
+# Dingux Cap32 for the RetroFW
+#
+# by pingflood; 2019
 #
 
 CHAINPREFIX := /opt/mipsel-linux-uclibc
@@ -54,15 +56,8 @@ MORE_CFLAGS += -I. -I$(SYSROOT)/usr/include  -I$(SYSROOT)/usr/lib  -I$(SYSROOT)/
 MORE_CFLAGS += -DMPU_JZ4740 -mips32 -O3 -fomit-frame-pointer -fsigned-char -ffast-math
 MORE_CFLAGS += -DGCW0_MODE
 MORE_CFLAGS += -DCAP32_VERSION=\"$(CAP32_VERSION)\"
-# MORE_CFLAGS += -DNO_STDIO_REDIRECT
 MORE_CFLAGS += -DDOUBLEBUF
 # MORE_CFLAGS += -DTRIPLEBUF
-
-# -fsigned-char -ffast-math -fomit-frame-pointer \
-# -fexpensive-optimizations -fno-strength-reduce  \
-
-#  -ffast-math -fomit-frame-pointer -fno-strength-reduce -fexpensive-optimizations \
-# -msoft-float -O3  -G 0
 
 CFLAGS = $(DEFAULT_CFLAGS) $(MORE_CFLAGS)
 LDFLAGS = -s
@@ -70,11 +65,8 @@ LDFLAGS = -s
 LIBS += -B$(SYSROOT)/lib
 LIBS += -lSDL
 LIBS += -lSDL_image
-LIBS += ./src/libcpccat/libcpccat.a 
+LIBS += ./src/libcpccat/libcpccat.a
 LIBS += -lpng -lz -lm -lpthread  -ldl
-
-#libcpccat/libcpccat.a  \ # old
-
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -89,23 +81,68 @@ $(TARGET): $(OBJS)
 	$(RANLIB) $@
 
 ipk: $(TARGET)
-	@rm -rf /tmp/.dingux-cap32-ipk/bios && mkdir -p /tmp/.dingux-cap32-ipk/root/home/retrofw/emus/dingux-cap32 /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators.systems
-	@cp -r dingux-cap32/dingux-cap32.dge dingux-cap32/dingux-cap32.man.txt dingux-cap32/dingux-cap32.png dingux-cap32/splash.png dingux-cap32/thumb.png dingux-cap32/background.png dingux-cap32/graphics dingux-cap32/bios /tmp/.dingux-cap32-ipk/root/home/retrofw/emus/dingux-cap32
-	@cp dingux-cap32/dingux-cap32.lnk /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators
-	@cp dingux-cap32/amstrad.dingux-cap32.lnk /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators.systems
-	@sed "s/^Version:.*/Version: $$(date +%Y%m%d)/" dingux-cap32/control > /tmp/.dingux-cap32-ipk/control
-	@cp dingux-cap32/conffiles /tmp/.dingux-cap32-ipk/
+	@rm -rf /tmp/.dingux-cap32-ipk/ && mkdir -p /tmp/.dingux-cap32-ipk/root/home/retrofw/emus/dingux-cap32 /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators.systems
+	@cp -r \
+	dingux-cap32/dingux-cap32.dge \
+	dingux-cap32/dingux-cap32.man.txt \
+	dingux-cap32/dingux-cap32.png \
+	dingux-cap32/splash.png \
+	dingux-cap32/thumb.png \
+	dingux-cap32/background.png \
+	dingux-cap32/graphics \
+	dingux-cap32/bios \
+	/tmp/.dingux-cap32-ipk/root/home/retrofw/emus/dingux-cap32
+
+	@echo "title=Dingux Cap32" > /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators/dingux-cap32.lnk
+	@echo "description=Amstrad CPC Emulator" >> /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators/dingux-cap32.lnk
+	@echo "exec=/home/retrofw/emus/dingux-cap32/dingux-cap32.dge" >> /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators/dingux-cap32.lnk
+	@echo "selectordir=/home/retrofw/roms/amstrad" >> /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators/dingux-cap32.lnk
+	@echo "selectorfilter=.dsk" >> /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators/dingux-cap32.lnk
+	@echo "clock=600" >> /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators/dingux-cap32.lnk
+
+	@echo "title=Amstrad CPC" > /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators.systems/amstrad.dingux-cap32.lnk
+	@echo "description=Dingux Cap32 Emulator" >> /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators.systems/amstrad.dingux-cap32.lnk
+	@echo "exec=/home/retrofw/emus/dingux-cap32/dingux-cap32.dge" >> /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators.systems/amstrad.dingux-cap32.lnk
+	@echo "selectordir=/home/retrofw/roms/amstrad" >> /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators.systems/amstrad.dingux-cap32.lnk
+	@echo "selectorfilter=.dsk" >> /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators.systems/amstrad.dingux-cap32.lnk
+	@echo "clock=600" >> /tmp/.dingux-cap32-ipk/root/home/retrofw/apps/gmenu2x/sections/emulators.systems/amstrad.dingux-cap32.lnk
+
+	@echo "/home/retrofw/apps/gmenu2x/sections/emulators/dingux-cap32.lnk" > /tmp/.dingux-cap32-ipk/conffiles
+	@echo "/home/retrofw/apps/gmenu2x/sections/emulators.systems/amstrad.dingux-cap32.lnk" >> /tmp/.dingux-cap32-ipk/conffiles
+
+	@echo "Package: dingux-cap32" > /tmp/.dingux-cap32-ipk/control
+	@echo "Version: $$(date +%Y%m%d)" >> /tmp/.dingux-cap32-ipk/control
+	@echo "Description: Dingux Cap32 for the RetroFW" >> /tmp/.dingux-cap32-ipk/control
+	@echo "Section: emulators" >> /tmp/.dingux-cap32-ipk/control
+	@echo "Priority: optional" >> /tmp/.dingux-cap32-ipk/control
+	@echo "Maintainer: $(PKG_MAINTAINER)" >> /tmp/.dingux-cap32-ipk/control
+	@echo "Architecture: mipsel" >> /tmp/.dingux-cap32-ipk/control
+	@echo "Homepage: https://github.com/$(PKG_MAINTAINER)/dingux-cap32" >> /tmp/.dingux-cap32-ipk/control
+	@echo "Depends:" >> /tmp/.dingux-cap32-ipk/control
+	@echo "Source: https://github.com/$(PKG_MAINTAINER)/dingux-cap32" >> /tmp/.dingux-cap32-ipk/control
+
 	@tar --owner=0 --group=0 -czvf /tmp/.dingux-cap32-ipk/control.tar.gz -C /tmp/.dingux-cap32-ipk/ control conffiles
 	@tar --owner=0 --group=0 -czvf /tmp/.dingux-cap32-ipk/data.tar.gz -C /tmp/.dingux-cap32-ipk/root/ .
 	@echo 2.0 > /tmp/.dingux-cap32-ipk/debian-binary
 	@ar r dingux-cap32/dingux-cap32.ipk /tmp/.dingux-cap32-ipk/control.tar.gz /tmp/.dingux-cap32-ipk/data.tar.gz /tmp/.dingux-cap32-ipk/debian-binary
 
-clean:
-	rm -f $(OBJS) $(TARGET)
+opk: $(TARGET)
+	@mksquashfs \
+	dingux-cap32/default.retrofw.desktop \
+	dingux-cap32/amstrad.retrofw.desktop \
+	dingux-cap32/dingux-cap32.dge \
+	dingux-cap32/dingux-cap32.man.txt \
+	dingux-cap32/dingux-cap32.png \
+	dingux-cap32/splash.png \
+	dingux-cap32/thumb.png \
+	dingux-cap32/background.png \
+	dingux-cap32/graphics \
+	dingux-cap32/bios \
+	dingux-cap32/dingux-cap32.opk \
+	-all-root -noappend -no-exports -no-xattrs
 
 ctags:
 	ctags *[ch]
 
-# install: $(TARGET)
-# 	cp $< /media/dingux/local/emulators/dingux-cap32/
-
+clean:
+	rm -f $(OBJS) $(TARGET) ./dingux-cap32/dingux-cap32.ipk

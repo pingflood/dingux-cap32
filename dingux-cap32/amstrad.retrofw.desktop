@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Amstrad CPC
+Comment=Dingux Cap32 Emulator
+Exec=dingux-cap32.dge %f
+Icon=dingux-cap32
+Categories=emulators;
+X-OD-Manual=dingux-cap32.man.txt
+X-OD-Filter=.dsk,.sna
+Terminal=false
+Type=Application
+StartupNotify=true
